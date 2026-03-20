@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NeonQuant Docs</title>
+  <meta name="description" content="NeonQuant product documentation for the mobile app and Telegram bot." />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-0: #070714;
+      --bg-1: #0d1024;
+      --bg-2: #151a38;
+      --surface: rgba(22, 26, 58, 0.64);
+      --surface-strong: rgba(30, 35, 74, 0.82);
+      --border: rgba(255, 255, 255, 0.11);
+      --text: #edf3ff;
+      --muted: #aeb8d6;
+      --pink: #ff4fd8;
+      --cyan: #3df6ff;
+      --violet: #8b5dff;
+      --gold: #ffd36e;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+      --shadow-soft: 0 12px 30px rgba(10, 10, 35, 0.35);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255,79,216,0.22), transparent 0 28%),
+        radial-gradient(circle at 85% 18%, rgba(61,246,255,0.18), transparent 0 28%),
+        radial-gradient(circle at 50% 85%, rgba(139,93,255,0.18), transparent 0 32%),
+        linear-gradient(180deg, #050611 0%, #090b18 30%, #0d1024 65%, #0a0d1c 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(70px);
+      opacity: 0.7;
+    }
+
+    body::before {
+      width: 22rem;
+      height: 22rem;
+      top: 6rem;
+      left: -5rem;
+      background: rgba(255,79,216,0.28);
+    }
+
+    body::after {
+      width: 24rem;
+      height: 24rem;
+      right: -6rem;
+      top: 20rem;
+      background: rgba(61,246,255,0.20);
+    }
+
+    .app-shell {
+      position: relative;
+      z-index: 1;
+    }
+
+    .glass {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .site-nav {
+      border-radius: 999px;
+      padding: 0.7rem 1rem;
+      margin-top: 1rem;
+    }
+
+    .brand-mark {
+      width: 2.6rem;
+      height: 2.6rem;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(255,79,216,0.95), rgba(61,246,255,0.95));
+      color: #0b0d18;
+      font-weight: 800;
+      box-shadow: 0 10px 24px rgba(61,246,255,0.22);
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      margin: 0;
+      color: #ffffff;
+    }
+
+    .brand-subtitle {
+      color: var(--muted);
+      font-size: 0.76rem;
+      margin: 0;
+    }
+
+    .nav-links .nav-link {
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 0.65rem 0.95rem;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .nav-links .nav-link:hover,
+    .nav-links .nav-link.active {
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+    }
+
+    .btn-neon {
+      border: none;
+      color: #08101d;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--cyan), var(--pink));
+      box-shadow: 0 12px 24px rgba(255,79,216,0.22), 0 8px 20px rgba(61,246,255,0.18);
+    }
+
+    .btn-neon:hover {
+      color: #08101d;
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      padding: 5rem 0 3rem;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #dfe7ff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-dot {
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--pink), var(--cyan));
+      box-shadow: 0 0 16px rgba(61,246,255,0.7);
+    }
+
+    .display-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.6rem, 5vw, 5rem);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      margin: 1rem 0 1rem;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #fff 0%, #d4cbff 28%, #7fe8ff 55%, #ff89e9 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .lead-copy {
+      max-width: 46rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .hero-card,
+    .feature-card,
+    .quick-card,
+    .search-card,
+    .footer-card {
+      border-radius: var(--radius-xl);
+    }
+
+    .hero-card {
+      padding: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: -30% auto auto -12%;
+      width: 14rem;
+      height: 14rem;
+      background: radial-gradient(circle, rgba(255,79,216,0.32), transparent 65%);
+      pointer-events: none;
+    }
+
+    .placeholder-logo,
+    .placeholder-shot {
+      border-radius: 24px;
+      border: 1px dashed rgba(255,255,255,0.2);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)),
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.05) 0,
+          rgba(255,255,255,0.05) 1px,
+          transparent 1px,
+          transparent 28px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,0.04) 0,
+          rgba(255,255,255,0.04) 1px,
+          transparent 1px,
+          transparent 28px
+        );
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: #dbe5ff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .placeholder-logo {
+      min-height: 190px;
+      padding: 1.5rem;
+      background-color: rgba(12, 14, 32, 0.75);
+    }
+
+    .placeholder-shot {
+      min-height: 280px;
+      padding: 2rem;
+      background-color: rgba(11, 13, 31, 0.82);
+    }
+
+    .placeholder-logo::after,
+    .placeholder-shot::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -35% auto;
+      width: 12rem;
+      height: 12rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(61,246,255,0.20), transparent 68%);
+      filter: blur(10px);
+    }
+
+    .placeholder-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.05rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.35rem;
+    }
+
+    .placeholder-copy {
+      color: var(--muted);
+      max-width: 18rem;
+      margin: 0 auto;
+      font-size: 0.92rem;
+    }
+
+    .stat-pill {
+      border-radius: 999px;
+      padding: 0.85rem 1rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .stat-label {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.2rem;
+    }
+
+    .stat-value {
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
+    }
+
+    .section-copy {
+      color: var(--muted);
+      max-width: 40rem;
+    }
+
+    .feature-card,
+    .quick-card,
+    .search-card,
+    .footer-card {
+      padding: 1.25rem;
+      height: 100%;
+    }
+
+    .feature-icon,
+    .quick-icon {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      font-size: 1.1rem;
+      background: linear-gradient(135deg, rgba(255,79,216,0.22), rgba(61,246,255,0.22));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .feature-title,
+    .quick-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-copy,
+    .quick-copy,
+    .footer-copy,
+    .search-copy {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    .doc-link-list {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .doc-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--text);
+      padding: 1rem 1.05rem;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: 0.2s ease;
+    }
+
+    .doc-link:hover {
+      transform: translateY(-2px);
+      color: #fff;
+      background: rgba(255,255,255,0.07);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .doc-link small {
+      color: var(--muted);
+      display: block;
+      margin-top: 0.2rem;
+    }
+
+    .arrow-chip {
+      min-width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.07);
+      color: var(--cyan);
+      font-weight: 800;
+    }
+
+    .search-input {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff;
+      border-radius: 16px;
+      min-height: 54px;
+    }
+
+    .search-input:focus {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      border-color: rgba(61,246,255,0.5);
+      box-shadow: 0 0 0 0.25rem rgba(61,246,255,0.12);
+    }
+
+    .search-input::placeholder { color: #b6c2e7; }
+
+    .kbd-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2rem;
+      height: 2rem;
+      padding: 0 0.6rem;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    .tiny-label {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    .grid-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+    }
+
+    footer {
+      padding-bottom: 3rem;
+    }
+
+    @media (max-width: 991.98px) {
+      .site-nav {
+        border-radius: 28px;
+      }
+
+      .display-title {
+        line-height: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="container py-3 py-lg-4">
+      <nav class="navbar navbar-expand-lg glass site-nav">
+        <div class="container-fluid px-0">
+          <a class="navbar-brand d-flex align-items-center gap-3 me-4" href="#">
+            <div class="brand-mark">N</div>
+            <div>
+              <p class="brand-title">NeonQuant Docs</p>
+              <p class="brand-subtitle">Trading Confidence Ecosystem</p>
+            </div>
+          </a>
+
+          <button class="navbar-toggler border-0 shadow-none text-white" type="button" data-bs-toggle="collapse" data-bs-target="#docsNavbar" aria-controls="docsNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon" style="filter: invert(1) saturate(0) brightness(2);"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="docsNavbar">
+            <ul class="navbar-nav nav-links ms-auto mb-3 mb-lg-0" id="docsNavLinks"></ul>
+            <div class="ms-lg-3 d-flex gap-2 pt-2 pt-lg-0">
+              <a href="https://neonquant.com" class="btn btn-neon rounded-pill px-4">Website</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <section class="hero">
+        <div class="row align-items-center g-4 g-xl-5">
+          <div class="col-lg-7">
+            <span class="eyebrow">
+              <span class="eyebrow-dot"></span>
+              NeonQuant product documentation
+            </span>            <h1 class="display-title">
+              <span class="gradient-text">NeonQuant docs</span>
+            </h1>
+            <p class="lead-copy mb-4">
+              Explore setup, usage, billing, and support documentation for NeonQuant. Right now the live product lineup includes the mobile app and the Telegram bot, with room to expand this docs portal as more products launch.
+            </p>
+
+            <div class="row g-3">
+              <div class="col-sm-4">
+                <div class="stat-pill glass">
+                  <span class="stat-label">Products</span>
+                  <span class="stat-value">2 Available</span>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="stat-pill glass">
+                  <span class="stat-label">Mobile App</span>
+                  <span class="stat-value">Testing</span>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="stat-pill glass">
+                  <span class="stat-label">Telegram Bot</span>
+                  <span class="stat-value">Available Now</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-5">
+            <div class="hero-card glass">
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="placeholder-logo">
+                    <img class="img-fluid" alt="logo" src="./logo.webp">
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="placeholder-shot">
+                    <img class="img-fluid" alt="logo" src="./shot.webp">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pb-4" id="sections">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
+          <div>
+            <p class="tiny-label mb-2">What's here?</p>
+            <h2 class="section-title mb-2">Everything starts here</h2>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-md-6 col-xl-3">
+            <div class="feature-card glass">
+              <div class="feature-icon mb-3">◎</div>
+              <h3 class="feature-title">Mobile App</h3>
+              <p class="feature-copy">Install guides, account access, forecast usage, feature overviews, and app troubleshooting.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div class="feature-card glass">
+              <div class="feature-icon mb-3">◈</div>
+              <h3 class="feature-title">Telegram Bot</h3>
+              <p class="feature-copy">Commands, subscription flow, forecast lookups, billing help, and private chat usage guides.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div class="feature-card glass">
+              <div class="feature-icon mb-3">△</div>
+              <h3 class="feature-title">Billing & Access</h3>
+              <p class="feature-copy">Subscription details, Stripe checkout flow, access status, redemption help, and account support.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div class="feature-card glass">
+              <div class="feature-icon mb-3">✦</div>
+              <h3 class="feature-title">Updates & Releases</h3>
+              <p class="feature-copy">Product release notes, rollout changes, fixes, known issues, and launch announcements.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="grid-line my-4"></div>
+
+      <footer>
+        <div class="footer-card glass">
+          <div class="row g-4 align-items-center">
+            <div class="col-lg-7">
+              <p class="tiny-label mb-2">NeonQuant</p>
+              <h2 class="section-title mb-2">Do you need help with something?</h2>
+              <p class="footer-copy">Read through the docs and feel free to reach out to our support via email if you need any further help.</p>
+            </div>
+            <div class="col-lg-5 text-lg-end">
+              <a href="http://neonquant.com/support.html" class="btn btn-neon rounded-pill px-4">Contact Support</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="./nav.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

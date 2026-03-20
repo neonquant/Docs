@@ -1,0 +1,895 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NeonQuant Docs — Telegram Bot</title>
+  <meta name="description" content="NeonQuant Telegram bot user guide and documentation." />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-0: #070714;
+      --bg-1: #0d1024;
+      --bg-2: #151a38;
+      --surface: rgba(22, 26, 58, 0.64);
+      --surface-strong: rgba(30, 35, 74, 0.82);
+      --border: rgba(255, 255, 255, 0.11);
+      --text: #edf3ff;
+      --muted: #aeb8d6;
+      --pink: #ff4fd8;
+      --cyan: #3df6ff;
+      --violet: #8b5dff;
+      --gold: #ffd36e;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+      --shadow-soft: 0 12px 30px rgba(10, 10, 35, 0.35);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --sidebar-w: 280px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255,79,216,0.22), transparent 0 28%),
+        radial-gradient(circle at 85% 18%, rgba(61,246,255,0.18), transparent 0 28%),
+        radial-gradient(circle at 50% 85%, rgba(139,93,255,0.18), transparent 0 32%),
+        linear-gradient(180deg, #050611 0%, #090b18 30%, #0d1024 65%, #0a0d1c 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(70px);
+      opacity: 0.7;
+    }
+
+    body::before {
+      width: 22rem;
+      height: 22rem;
+      top: 6rem;
+      left: -5rem;
+      background: rgba(255,79,216,0.28);
+    }
+
+    body::after {
+      width: 24rem;
+      height: 24rem;
+      right: -6rem;
+      top: 20rem;
+      background: rgba(61,246,255,0.20);
+    }
+
+    .app-shell {
+      position: relative;
+      z-index: 1;
+    }
+
+    .glass {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .site-nav {
+      border-radius: 999px;
+      padding: 0.7rem 1rem;
+      margin-top: 1rem;
+    }
+
+    .brand-mark {
+      width: 2.6rem;
+      height: 2.6rem;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(255,79,216,0.95), rgba(61,246,255,0.95));
+      color: #0b0d18;
+      font-weight: 800;
+      box-shadow: 0 10px 24px rgba(61,246,255,0.22);
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      margin: 0;
+      color: #ffffff;
+    }
+
+    .brand-subtitle {
+      color: var(--muted);
+      font-size: 0.76rem;
+      margin: 0;
+    }
+
+    .nav-links .nav-link {
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 0.65rem 0.95rem;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .nav-links .nav-link:hover,
+    .nav-links .nav-link.active {
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+    }
+
+    .btn-neon {
+      border: none;
+      color: #08101d;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--cyan), var(--pink));
+      box-shadow: 0 12px 24px rgba(255,79,216,0.22), 0 8px 20px rgba(61,246,255,0.18);
+    }
+
+    .btn-neon:hover {
+      color: #08101d;
+      transform: translateY(-1px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #dfe7ff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-dot {
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--pink), var(--cyan));
+      box-shadow: 0 0 16px rgba(61,246,255,0.7);
+    }
+
+    .page-hero {
+      padding: 3.25rem 0 2rem;
+    }
+
+    .page-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.8rem);
+      line-height: 0.98;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      margin: 1rem 0 1rem;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #fff 0%, #d4cbff 28%, #7fe8ff 55%, #ff89e9 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .lead-copy {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 48rem;
+    }
+
+    .hero-card,
+    .sidebar-card,
+    .content-card,
+    .callout-card,
+    .command-card,
+    .footer-card,
+    .quick-card {
+      border-radius: var(--radius-xl);
+      padding: 1.25rem;
+    }
+
+    .hero-visual {
+      min-height: 320px;
+      border-radius: 24px;
+      border: 1px dashed rgba(255,255,255,0.18);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 28px),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 28px);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: #dbe5ff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-visual::after {
+      content: "";
+      position: absolute;
+      width: 14rem;
+      height: 14rem;
+      right: -2rem;
+      bottom: -4rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(61,246,255,0.22), transparent 68%);
+      filter: blur(10px);
+    }
+
+    .placeholder-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.02rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.35rem;
+    }
+
+    .placeholder-copy,
+    .muted-copy,
+    .section-copy,
+    .body-copy,
+    .list-copy,
+    .callout-copy {
+      color: var(--muted);
+    }
+
+    .stat-pill {
+      border-radius: 999px;
+      padding: 0.85rem 1rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.07);
+      height: 100%;
+    }
+
+    .stat-label {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.2rem;
+    }
+
+    .stat-value {
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    .docs-layout {
+      display: grid;
+      grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+      padding-bottom: 3rem;
+    }
+
+    .sidebar-sticky {
+      position: sticky;
+      top: 1.25rem;
+    }
+
+    .sidebar-heading,
+    .section-label {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .toc-list,
+    .mini-list,
+    .content-list,
+    .number-list,
+    .command-list {
+      padding-left: 0;
+      margin-bottom: 0;
+      list-style: none;
+    }
+
+    .toc-list li + li,
+    .mini-list li + li,
+    .content-list li + li,
+    .command-list li + li {
+      margin-top: 0.55rem;
+    }
+
+    .toc-link {
+      display: block;
+      text-decoration: none;
+      color: var(--muted);
+      padding: 0.75rem 0.9rem;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: 0.2s ease;
+    }
+
+    .toc-link:hover,
+    .toc-link.active {
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+      transform: translateY(-1px);
+    }
+
+    .mini-list li,
+    .content-list li {
+      color: var(--muted);
+      position: relative;
+      padding-left: 1rem;
+    }
+
+    .mini-list li::before,
+    .content-list li::before {
+      content: "";
+      width: 0.42rem;
+      height: 0.42rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--pink), var(--cyan));
+      position: absolute;
+      left: 0;
+      top: 0.55rem;
+      box-shadow: 0 0 12px rgba(61,246,255,0.4);
+    }
+
+    .doc-section + .doc-section {
+      margin-top: 1.25rem;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: clamp(1.2rem, 2vw, 1.8rem);
+      margin-bottom: 0.8rem;
+    }
+
+    .subsection-title {
+      font-size: 1.02rem;
+      font-weight: 700;
+      margin-bottom: 0.55rem;
+    }
+
+    .number-list li {
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-start;
+      color: var(--muted);
+      padding: 0.85rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .number-list li:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .step-num {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(255,79,216,0.22), rgba(61,246,255,0.22));
+      border: 1px solid rgba(255,255,255,0.08);
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .callout-card {
+      background: linear-gradient(135deg, rgba(255,79,216,0.12), rgba(61,246,255,0.10));
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .command-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .command-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 0.95rem;
+      border-radius: 14px;
+      background: rgba(8,12,30,0.8);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+      font-size: 0.92rem;
+      overflow-x: auto;
+      max-width: 100%;
+    }
+
+    .command-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .command-ref {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .command-ref th,
+    .command-ref td {
+      padding: 0.95rem 1rem;
+      vertical-align: top;
+    }
+
+    .command-ref thead th {
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .command-ref tbody tr + tr td {
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .command-ref td {
+      color: var(--muted);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .command-ref code {
+      color: #fff;
+      background: rgba(8,12,30,0.65);
+      padding: 0.18rem 0.45rem;
+      border-radius: 10px;
+    }
+
+    .quick-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
+      margin: 1rem 0;
+    }
+
+    .footer-card {
+      margin-bottom: 3rem;
+    }
+
+    .footer-actions .btn {
+      border-radius: 999px;
+      padding-inline: 1.2rem;
+    }
+
+    @media (max-width: 991.98px) {
+      .site-nav {
+        border-radius: 28px;
+      }
+
+      .docs-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar-sticky {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="container py-3 py-lg-4">
+      <nav class="navbar navbar-expand-lg glass site-nav">
+        <div class="container-fluid px-0">
+          <a class="navbar-brand d-flex align-items-center gap-3 me-4" href="index.html">
+            <div class="brand-mark">N</div>
+            <div>
+              <p class="brand-title">NeonQuant Docs</p>
+              <p class="brand-subtitle">Trading Confidence Ecosystem</p>
+            </div>
+          </a>
+
+          <button class="navbar-toggler border-0 shadow-none text-white" type="button" data-bs-toggle="collapse" data-bs-target="#docsNavbar" aria-controls="docsNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon" style="filter: invert(1) saturate(0) brightness(2);"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="docsNavbar">
+            <ul class="navbar-nav nav-links ms-auto mb-3 mb-lg-0" id="docsNavLinks"></ul>
+            <div class="ms-lg-3 d-flex gap-2 pt-2 pt-lg-0">
+              <a href="#guide" class="btn btn-neon rounded-pill px-4">Read Guide</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <section class="page-hero">
+        <div class="row g-4 align-items-center">
+          <div class="col-lg-7">
+            <span class="eyebrow">
+              <span class="eyebrow-dot"></span>
+              NeonQuant Telegram bot guide
+            </span>
+            <h1 class="page-title">
+              <span class="gradient-text">Use NeonQuant</span><br>
+              directly inside Telegram.
+            </h1>
+            <p class="lead-copy mb-4">
+              This guide explains the Telegram bot from an end-user perspective, including how to start, subscribe, redeem access, check sentiment and headlines, and run quick ticker lookups inside a private chat.
+            </p>
+
+            <div class="row g-3">
+              <div class="col-sm-4">
+                <div class="stat-pill glass">
+                  <span class="stat-label">Live Product</span>
+                  <span class="stat-value">Telegram Bot</span>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="stat-pill glass">
+                  <span class="stat-label">Best Experience</span>
+                  <span class="stat-value">Private Chat</span>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="stat-pill glass">
+                  <span class="stat-label">Core Uses</span>
+                  <span class="stat-value">Sentiment • News • Snapshots</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-5">
+            <div class="hero-card glass">
+              <div class="hero-visual">
+                <img class="img-fluid" alt="screenshot" src="./tg-shot.webp">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="docs-layout" id="guide">
+        <aside class="sidebar-sticky">
+          <div class="sidebar-card glass mb-3">
+            <p class="sidebar-heading mb-3">On this page</p>
+            <ul class="toc-list">
+              <li><a class="toc-link active" href="#what-it-does">What the bot does</a></li>
+              <li><a class="toc-link" href="#before-you-start">Before you start</a></li>
+              <li><a class="toc-link" href="#getting-started">Getting started</a></li>
+              <li><a class="toc-link" href="#access-commands">Access & subscription</a></li>
+              <li><a class="toc-link" href="#market-commands">Market commands</a></li>
+              <li><a class="toc-link" href="#ticker-lookups">Quick ticker lookups</a></li>
+              <li><a class="toc-link" href="#buttons">Buttons & refresh</a></li>
+              <li><a class="toc-link" href="#no-access">If you do not have access</a></li>
+              <li><a class="toc-link" href="#best-practices">Best practices</a></li>
+              <li><a class="toc-link" href="#reference">Quick reference</a></li>
+              <li><a class="toc-link" href="#user-flow">Simple user flow</a></li>
+              <li><a class="toc-link" href="#need-help">Need help?</a></li>
+            </ul>
+          </div>
+
+          <div class="sidebar-card glass">
+            <p class="sidebar-heading mb-3">Quick notes</p>
+            <ul class="mini-list">
+              <li>Use the bot in a private 1-on-1 chat</li>
+              <li>Some features require active access</li>
+              <li>Tickers work as commands or plain text</li>
+              <li>Buttons can refresh or load more data</li>
+            </ul>
+          </div>
+        </aside>
+
+        <main>
+          <div class="callout-card glass mb-4">
+            <div class="callout-title">Bot overview</div>
+            <p class="callout-copy mb-0">The NeonQuant Telegram bot gives you market snapshots, sentiment summaries, recent news, and quick asset lookups directly inside Telegram.</p>
+          </div>
+
+          <section class="doc-section content-card glass" id="what-it-does">
+            <p class="section-label mb-2">Overview</p>
+            <h2 class="section-title">What the bot does</h2>
+            <p class="body-copy">The bot gives you market snapshots, sentiment summaries, recent news, and quick asset lookups directly inside Telegram.</p>
+            <ul class="content-list mt-3">
+              <li>Market snapshots for supported assets</li>
+              <li>Sentiment summaries and broader market reads</li>
+              <li>Recent headlines and ticker-specific news</li>
+              <li>Quick command-based asset lookups</li>
+            </ul>
+          </section>
+
+          <section class="doc-section content-card glass" id="before-you-start">
+            <p class="section-label mb-2">Before using the bot</p>
+            <h2 class="section-title">Before you start</h2>
+            <ul class="content-list">
+              <li>Open the bot in <strong>Telegram</strong></li>
+              <li>Use the bot in a <strong>private 1-on-1 chat</strong> for the full experience</li>
+              <li>Some market features require an active subscription or redeemed access code</li>
+            </ul>
+          </section>
+
+          <section class="doc-section content-card glass" id="getting-started">
+            <p class="section-label mb-2">Start here</p>
+            <h2 class="section-title">Getting started</h2>
+            <div class="command-grid">
+              <div class="command-card">
+                <h3 class="subsection-title">1. Start the bot</h3>
+                <div class="command-chip">/start</div>
+                <p class="body-copy mt-3 mb-0">This opens the welcome menu and shows the main commands.</p>
+              </div>
+              <div class="command-card">
+                <h3 class="subsection-title">2. Open the help menu</h3>
+                <div class="command-chip">/help</div>
+                <p class="body-copy mt-3 mb-0">Use this any time you want a quick list of commands and tips.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="doc-section content-card glass" id="access-commands">
+            <p class="section-label mb-2">Billing & access</p>
+            <h2 class="section-title">Access and subscription commands</h2>
+
+            <div class="command-grid mt-3">
+              <div class="command-card">
+                <h3 class="subsection-title">Subscribe for access</h3>
+                <div class="command-chip">/subscribe</div>
+                <ul class="content-list mt-3">
+                  <li>Creates a Stripe checkout link</li>
+                  <li>Lets you start paid access to the bot</li>
+                </ul>
+              </div>
+
+              <div class="command-card">
+                <h3 class="subsection-title">Manage your subscription</h3>
+                <div class="command-chip">/manage</div>
+                <ul class="content-list mt-3">
+                  <li>Opens your Stripe billing portal</li>
+                  <li>Lets you manage billing or subscription settings</li>
+                </ul>
+              </div>
+
+              <div class="command-card">
+                <h3 class="subsection-title">Redeem an access code</h3>
+                <div class="command-chip">/redeem YOUR_CODE</div>
+                <div class="command-chip mt-2">/redeem NQ1-XXXX-XXXX</div>
+                <ul class="content-list mt-3">
+                  <li>Activates access using a valid code</li>
+                  <li>If successful, your access is enabled until the expiration date shown by the bot</li>
+                </ul>
+              </div>
+
+              <div class="command-card">
+                <h3 class="subsection-title">Check your access status</h3>
+                <div class="command-chip">/access</div>
+                <ul class="content-list mt-3">
+                  <li>Shows whether your access is active</li>
+                  <li>Shows when your access expires</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="doc-section content-card glass" id="market-commands">
+            <p class="section-label mb-2">Core market tools</p>
+            <h2 class="section-title">Market commands</h2>
+
+            <div class="command-grid mt-3">
+              <div class="command-card">
+                <h3 class="subsection-title">View supported trading pairs</h3>
+                <div class="command-chip">/pairs</div>
+                <ul class="content-list mt-3">
+                  <li>Lists supported assets or pairs you can query</li>
+                  <li>Helps you see which ticker shortcuts the bot understands</li>
+                </ul>
+              </div>
+
+              <div class="command-card">
+                <h3 class="subsection-title">See hot high-confidence opportunities</h3>
+                <div class="command-chip">/hot</div>
+                <ul class="content-list mt-3">
+                  <li>Shows a shortlist of stronger high-confidence pairs</li>
+                  <li>Useful when you want quick ideas without checking assets one by one</li>
+                </ul>
+              </div>
+
+              <div class="command-card">
+                <h3 class="subsection-title">View overall market sentiment</h3>
+                <div class="command-chip">/overall</div>
+                <ul class="content-list mt-3">
+                  <li>Gives you a broad market pulse</li>
+                  <li>Summarizes current sentiment and supporting headlines</li>
+                </ul>
+              </div>
+
+              <div class="command-card">
+                <h3 class="subsection-title">View recent news headlines</h3>
+                <div class="command-chip">/news</div>
+                <ul class="content-list mt-3">
+                  <li>Shows general sentiment and news headlines</li>
+                  <li>Useful for a wider market view</li>
+                </ul>
+              </div>
+
+              <div class="command-card">
+                <h3 class="subsection-title">View news for a specific ticker</h3>
+                <div class="command-chip">/news BTC</div>
+                <p class="body-copy mt-3">You can replace <strong>BTC</strong> with another supported ticker.</p>
+                <ul class="content-list mt-3">
+                  <li>Filters the news feed for a specific asset</li>
+                  <li>Helps you focus on headlines related to the ticker you care about</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="doc-section content-card glass" id="ticker-lookups">
+            <p class="section-label mb-2">Direct asset checks</p>
+            <h2 class="section-title">Quick ticker lookups</h2>
+            <p class="body-copy">You can request a premium asset snapshot by typing the ticker as a Telegram command.</p>
+
+            <div class="quick-card mt-3">
+              <div class="command-chip">/btc</div>
+              <div class="command-chip mt-2">/eth</div>
+              <div class="command-chip mt-2">/sol</div>
+              <div class="section-divider"></div>
+              <p class="body-copy mb-2">What you get:</p>
+              <ul class="content-list">
+                <li>Forecast snapshot</li>
+                <li>Sentiment view</li>
+                <li>Chart image when available</li>
+                <li>Refresh buttons when available</li>
+              </ul>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <h3 class="subsection-title">Sending a ticker without a slash</h3>
+            <p class="body-copy">You can also send a ticker as plain text.</p>
+            <div class="quick-card mt-3">
+              <div class="command-chip">BTC</div>
+              <div class="command-chip mt-2">ETH</div>
+              <div class="command-chip mt-2">SOL</div>
+            </div>
+            <p class="body-copy mt-3 mb-0">The bot will try to treat it as an asset lookup and return the matching market snapshot.</p>
+          </section>
+
+          <section class="doc-section content-card glass" id="buttons">
+            <p class="section-label mb-2">Interactive controls</p>
+            <h2 class="section-title">Buttons and refresh actions</h2>
+            <p class="body-copy">Some bot messages include buttons.</p>
+            <ul class="content-list mt-3">
+              <li>Refresh a market snapshot</li>
+              <li>Open supported pairs</li>
+              <li>Open overall sentiment</li>
+              <li>Load more headlines in a news feed</li>
+            </ul>
+          </section>
+
+          <section class="doc-section content-card glass" id="no-access">
+            <p class="section-label mb-2">Access required</p>
+            <h2 class="section-title">If you do not have access yet</h2>
+            <p class="body-copy">If your subscription is not active, the bot may ask you to use one of these commands first.</p>
+            <div class="quick-card mt-3">
+              <div class="command-chip">/subscribe</div>
+              <div class="command-chip mt-2">/manage</div>
+              <div class="command-chip mt-2">/redeem YOUR_CODE</div>
+            </div>
+          </section>
+
+          <section class="doc-section content-card glass" id="best-practices">
+            <p class="section-label mb-2">Suggested usage</p>
+            <h2 class="section-title">Best practices</h2>
+            <ul class="content-list">
+              <li>Use the bot in a private chat</li>
+              <li>Start with <strong>/help</strong> if you are unsure what to do next</li>
+              <li>Use <strong>/pairs</strong> to discover supported assets</li>
+              <li>Use <strong>/overall</strong> for a market-wide read</li>
+              <li>Use <strong>/news BTC</strong> or <strong>/btc</strong> when you want to focus on one asset</li>
+            </ul>
+          </section>
+
+          <section class="doc-section content-card glass" id="reference">
+            <p class="section-label mb-2">Command list</p>
+            <h2 class="section-title">Quick command reference</h2>
+            <div class="table-responsive">
+              <table class="command-ref">
+                <thead>
+                  <tr>
+                    <th>Command</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>/start</code></td><td>Open the welcome menu</td></tr>
+                  <tr><td><code>/help</code></td><td>Show the help menu</td></tr>
+                  <tr><td><code>/subscribe</code></td><td>Get a Stripe checkout link</td></tr>
+                  <tr><td><code>/manage</code></td><td>Open subscription management</td></tr>
+                  <tr><td><code>/redeem YOUR_CODE</code></td><td>Redeem an access code</td></tr>
+                  <tr><td><code>/access</code></td><td>Show your access status</td></tr>
+                  <tr><td><code>/pairs</code></td><td>List supported pairs</td></tr>
+                  <tr><td><code>/hot</code></td><td>Show hot high-confidence pairs</td></tr>
+                  <tr><td><code>/overall</code></td><td>Show overall market sentiment</td></tr>
+                  <tr><td><code>/news</code></td><td>Show general headlines</td></tr>
+                  <tr><td><code>/news BTC</code></td><td>Show headlines for a ticker</td></tr>
+                  <tr><td><code>/btc</code></td><td>Quick asset snapshot</td></tr>
+                  <tr><td><code>/eth</code></td><td>Quick asset snapshot</td></tr>
+                  <tr><td><code>/sol</code></td><td>Quick asset snapshot</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="doc-section content-card glass" id="user-flow">
+            <p class="section-label mb-2">Example walkthrough</p>
+            <h2 class="section-title">Simple user flow example</h2>
+            <ol class="number-list">
+              <li><span class="step-num">1</span><div>Open the bot and send <strong>/start</strong>.</div></li>
+              <li><span class="step-num">2</span><div>If needed, send <strong>/subscribe</strong> or <strong>/redeem YOUR_CODE</strong>.</div></li>
+              <li><span class="step-num">3</span><div>Confirm access with <strong>/access</strong>.</div></li>
+              <li><span class="step-num">4</span><div>Explore the market using <strong>/overall</strong>, <strong>/hot</strong>, or <strong>/pairs</strong>.</div></li>
+              <li><span class="step-num">5</span><div>Check a specific asset with <strong>/btc</strong> or another supported ticker.</div></li>
+              <li><span class="step-num">6</span><div>Read ticker-specific headlines with <strong>/news BTC</strong>.</div></li>
+            </ol>
+          </section>
+
+          <section class="doc-section content-card glass" id="need-help">
+            <p class="section-label mb-2">Support</p>
+            <h2 class="section-title">Need help?</h2>
+            <p class="body-copy">If a command does not work:</p>
+            <ul class="content-list mt-3">
+              <li>Try <strong>/help</strong></li>
+              <li>Make sure you are messaging the bot in a private chat</li>
+              <li>Make sure your subscription or redeemed access is active</li>
+            </ul>
+          </section>
+        </main>
+      </div>
+
+      <footer>
+        <div class="footer-card glass">
+          <div class="row g-4 align-items-center">
+            <div class="col-lg-8">
+              <p class="section-label mb-2">NeonQuant docs</p>
+              <h2 class="section-title mb-2">Telegram bot guide</h2>
+            </div>
+            <div class="col-lg-4 text-lg-end footer-actions">
+              <a href="index.html" class="btn btn-outline-light me-2">Back to Home</a>
+              <a href="app.html" class="btn btn-neon">Mobile App Docs</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="./nav.js"> </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
